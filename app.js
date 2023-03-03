@@ -1,6 +1,6 @@
 const express = require("express");
 const {ErrorHandler, NotFoundError} = require("./util/errorHandler");
-const {loginValidationSchema,registerValidationSchema} = require("./validators/auth.validator")
+const {registerSchema} = require("./validators/auth.validator")
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
@@ -8,19 +8,22 @@ app.use(express.urlencoded({extended: true}));
 
 app.post("/login",async(req,res,next) => {
     try {
-        await loginValidationSchema.validateAsync(req.body);
+
         res.send(req.body)
     } catch (error) {
         next(error)
     }
 })
 
-app.post("/register", async(req,res,next) => {
-    try {
-        await registerValidationSchema.validateAsync(req.body);
+app.post("/register",(req,res,next) => {
+    try 
+    {
+        const [error] = registerSchema.validate(req.body)
+        console.log(error);
+        if(error) throw error
         res.send(req.body);
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 })
 

@@ -1,4 +1,4 @@
-const {default: Schema} = require("validate")
+const Schema = require("validate")
 
 
 const registerSchema = new Schema({
